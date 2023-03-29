@@ -1,11 +1,13 @@
 import './App.css';
-import { ListItem } from './components/ListItem/ListItem'
+import { Header } from './components/Header/Header';
+import { Products } from './components/Products/Products'
 
 function App() {
   return (
-    <div className="App">
-      <ListItem />
-    </div>
+    <div>
+      <Header />
+      <Products />
+    </div>    
   );
 }
 
