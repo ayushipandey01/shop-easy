@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import { Form } from "../Form/Form"
 import { ListItem } from "../ListItem/ListItem";
+import { Loader } from "../Loader/Loader";
 
 export const Products = () => {
   // const [title , setTitle] = useState("");
@@ -10,6 +11,7 @@ export const Products = () => {
   // const [thumbnail , setThumbnail] = useState("");
 
   const [items, setItems] = useState([]);
+  const [loader, setLoader] = useState(true);
 
   useEffect(()=> {
     // const result = fetch(`https://reactjs-practice-2023-default-rtdb.firebaseio.com/products.json`)
@@ -26,12 +28,17 @@ export const Products = () => {
         const response = await axios.get('https://reactjs-practice-2023-default-rtdb.firebaseio.com/products.json')
         
         const products = response.data;
+        setLoader(false);
         setItems(products);      
         
       }
       catch (error) {
         console.log("Error" , error);
+        setLoader(false);
         alert("Something went wrong !");
+      }
+      finally{
+        setLoader(false);
       }
     }
     fetchItems();
@@ -127,17 +134,20 @@ export const Products = () => {
   // }
 
   return (
-    <div className="product-list">
-      <div className={"product-list--wrapper"}>
-        {
-            items.map((item)=>{
-                return(
-                <ListItem key = {item.id} data = {item} updateItemTitle = {updateItemTitle}/>
-                )
-            })
-        }
+    <>    
+      <div className="product-list">
+        <div className={"product-list--wrapper"}>
+          {
+              items.map((item)=>{
+                  return(
+                  <ListItem key = {item.id} data = {item} updateItemTitle = {updateItemTitle}/>
+                  )
+              })
+          }
+        </div>
       </div>
-    </div>
+      {loader && <Loader />}
+    </>
 
     // <div className="product-wrapper">
     /* <Form items = {items} onChangeInput = {handleInput} onFormSubmission = {submitForm} />
