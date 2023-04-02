@@ -3,15 +3,15 @@ import addToCart from '../../assets/cart.png';
 
 export const ListItem = (props)=>{
 
-    const { data } = props; //object destructuring
+    const { data , updateItemTitle } = props; //object destructuring
 
-    // const [showMessage , setShowMessage] = useState("Not added to cart yet");
-
-    // const clickHandler = (()=>{
-    //     setShowMessage("Item added to Cart !");
-    // })
-
+    const [showMessage , setShowMessage] = useState("Not added to cart yet");
     const [counter , setCounter] = useState(0);
+
+    const clickHandler = (()=>{
+        setShowMessage("Item added to Cart !");
+        setCounter(counter+1);
+    })  
 
     const descreaseCounterByOne = ()=>{
         if(counter <= 0){
@@ -36,16 +36,25 @@ export const ListItem = (props)=>{
                     <h3>{data.title}</h3>
                 </div>
             </div>
-            {/* <small className='cart-message'>{showMessage}</small> */}
-            {/* <button onClick={clickHandler} className={'cart-add'}>
-                <span>Add to cart</span>
-                <img className = "cart-icon" src ={addToCart} alt="cart-icon" />
-            </button> */}
-            <div className={"cart-addon"}>
-                <button onClick={descreaseCounterByOne}><span>-</span></button>
-                <span className={"counter"}>{counter}</span>
-                <button onClick={increaseCounterByOne}><span>+</span></button>
-            </div>
+            <button onClick={()=> updateItemTitle (data.id)}>Update Title</button>
+            {
+                counter < 1 ?
+                <div>
+                    <small className='cart-message'>{showMessage}</small>
+                    <button onClick={clickHandler} className={'cart-add'}>
+                        <span>Add to cart</span>
+                        <img className = "cart-icon" src ={addToCart} alt="cart-icon" />
+                    </button>
+                </div>
+                :
+                <div>
+                   <div className={"cart-addon"}>
+                    <button onClick={descreaseCounterByOne}><span>-</span></button>
+                    <span className={"counter"}>{counter}</span>
+                    <button onClick={increaseCounterByOne}><span>+</span></button>
+                    </div> 
+                </div>
+            }
         </div>
     )
 }
