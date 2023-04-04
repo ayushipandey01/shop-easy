@@ -10,7 +10,6 @@ export const Modal = ({ onClose, children }) => {
                 <Fragment>
                     <Backdrop onClose={onClose}/>
                     <div className="modal">
-                        {children}
                         <button type= "close" onClick={onClose}>X</button>
                         <div className="content">{children}</div>
                     </div>

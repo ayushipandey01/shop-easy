@@ -1,7 +1,8 @@
 import addToCart from '../../assets/cart.png';
 import searchIcon from '../../assets/search-icon.png'
+import { Cart } from '../Cart/Cart';
 
-export const Header = ()=>{
+export const Header = ({count , items , onHandleEvent})=>{
     return (
         // <div classNameName={"header"}>
         //     <div>
@@ -55,18 +56,8 @@ export const Header = ()=>{
                 <line x1="21" y1="21" x2="15" y2="15" />
             </svg>
         </div>
-        <div className="cart-container">
-            <button>
-                <span data-items={0}>Cart</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart-plus" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" fill="none" strokeLineCap="round" strokeLineJoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <circle cx="6" cy="19" r="2" />
-                    <circle cx="17" cy="19" r="2" />
-                    <path d="M17 17h-11v-14h-2" />
-                    <path d="M6 5l6.005 .429m7.138 6.573l-.143 .998h-13" />
-                    <path d="M15 6h6m-3 -3v6" />
-                </svg>
-            </button>
+        <div className='cart-container'>
+            <Cart count = {count} items = {items} onHandleEvent = {onHandleEvent} />
         </div>
     </header>    
     )

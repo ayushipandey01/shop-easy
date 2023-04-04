@@ -5,27 +5,36 @@ import { Modal } from '../Modal/Modal';
 
 export const ListItem = (props)=>{
 
-    const { data , updateItemTitle } = props; //object destructuring
+    const { data , updateItemTitle , onAdd , onRemove} = props; //object destructuring
 
-    const [showMessage , setShowMessage] = useState("Not added to cart yet");
-    const [counter , setCounter] = useState(0);
+    // const [showMessage , setShowMessage] = useState("Not added to cart yet");
+    // const [counter , setCounter] = useState(0);
 
     const [showModal , setShowModal] = useState(false);
 
-    const clickHandler = (()=>{
-        setShowMessage("Item added to Cart !");
-        setCounter(counter+1);
+    const clickHandler = (event =>{
+        event.stopPropagation()
+        // setShowMessage("Item added to Cart !");
+        onAdd(data.id);
+        // setCounter(counter+1);
     })  
 
-    const descreaseCounterByOne = ()=>{
-        if(counter <= 0){
-            return;
-        }
-        setCounter(counter => counter - 1);
+    const descreaseCounterByOne = event =>{
+        event.stopPropagation();
+        onRemove(data.id);
+        // if(counter <= 0){
+        //     return;
+        // }
+        // if(counter == 1){
+        //     onRemove(data.id);
+        // }
+        // setCounter(counter - 1);
     }
 
-    const increaseCounterByOne = ()=>{
-        setCounter(counter => counter + 1);
+    const increaseCounterByOne = event =>{
+        event.stopPropagation()
+        onAdd(data.id);
+        // setCounter(counter + 1);
     }
 
     const handleModal = ()=> {
@@ -35,7 +44,7 @@ export const ListItem = (props)=>{
     return(
         <Fragment>
             <div onClick = {handleModal} className={'item-card'}>
-                <img className = {"img-fluid"} src= {data.thumbnail} alt ="product"/>
+                <img src= {data.thumbnail} alt ="product"/>
                 <div className={'item-card__information'}>
                     <div className={'pricing'}>
                         <span>₹{data.discountedPrice}</span>
@@ -45,11 +54,11 @@ export const ListItem = (props)=>{
                         <h3>{data.title}</h3>
                     </div>
                 </div>
-                <button onClick={()=> updateItemTitle (data.id)}>Update Title</button>
+                {/* <button onClick={()=> updateItemTitle (data.id)}>Update Title</button> */}
                 {
-                    counter < 1 ?
+                    data.quantity < 1 ?
                     <div>
-                        <small className='cart-message'>{showMessage}</small>
+                        {/* <small className='cart-message'>{showMessage}</small> */}
                         <button onClick={clickHandler} className={'cart-add'}>
                             <span>Add to cart</span>
                             <img className = "cart-icon" src ={addToCart} alt="cart-icon" />
@@ -59,7 +68,7 @@ export const ListItem = (props)=>{
                     <div>
                     <div className={"cart-addon"}>
                         <button onClick={descreaseCounterByOne}><span>-</span></button>
-                        <span className={"counter"}>{counter}</span>
+                        <span className={"counter"}>{data.quantity}</span>
                         <button onClick={increaseCounterByOne}><span>+</span></button>
                         </div> 
                     </div>
@@ -67,17 +76,39 @@ export const ListItem = (props)=>{
             </div>
             {showModal && 
                 <Modal onClose = {handleModal}>
-                    <div className='item-card__modal'>
-                        <div className='img-wrap'>
-                            <img className = {"img-fluid"} src= {data.thumbnail} alt ="product"/>
+                    <div className="item-card__modal">
+                        <div className="img-wrap">
+                            <img className='modal-image' src= {data.thumbnail} alt ="product"/>
                         </div>
-                        <div className='meta'>
+                        <div className="meta">
                             <h3>{data.title}</h3>
                             <div className={'pricing'}>
                             <span>₹{data.discountedPrice}</span>
-                            <strike>₹ {data.price} </strike>
-                            </div>
+                            <small>
+                                <strike>₹ {data.price} </strike>
+                            </small>
                         </div>
+                        <p>{data.description}</p>
+                        {
+                    data.quantity < 1 ?
+                    <div>
+                        {/* <small className='cart-message'>{showMessage}</small> */}
+                        <button onClick={clickHandler} className={'cart-add cart-add__modal'}>
+                            <span>Add to cart</span>
+                            <img className = "cart-icon" src ={addToCart} alt="cart-icon" />
+                        </button>
+                    </div>
+                    :
+                    <div>
+                    <div className={"cart-addon cart-addon__modal"}>
+                        <button onClick={descreaseCounterByOne}><span>-</span></button>
+                        <span className={"counter"}>{data.quantity}</span>
+                        <button onClick={increaseCounterByOne}><span>+</span></button>
+                        </div> 
+                    </div>
+                }
+                        </div>
+                        
                     </div>
                 </Modal> 
             }

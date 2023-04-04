@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ListItem } from "../ListItem/ListItem";
 import { Loader } from "../Loader/Loader";
 
-export const Products = () => {
+export const Products = ({ onAddItem , onRemoveItem , eventState }) => {
   // const [title , setTitle] = useState("");
   // const [price , setPrice] = useState(0);
   // const [discountedPrice , setdiscountedPrice] = useState(0);
@@ -12,6 +12,7 @@ export const Products = () => {
 
   const [items, setItems] = useState([]);
   const [loader, setLoader] = useState(true);
+  // const [presentItems , setPresentItems] = useState([]);
 
   useEffect(()=> {
     // const result = fetch(`https://reactjs-practice-2023-default-rtdb.firebaseio.com/products.json`)
@@ -28,8 +29,14 @@ export const Products = () => {
         const response = await axios.get('https://reactjs-practice-2023-default-rtdb.firebaseio.com/products.json')
         
         const products = response.data;
+        const transformedData = products.map((items)=>{
+          return {
+            ...items,
+            quantity : 0
+          }
+        })
         setLoader(false);
-        setItems(products);      
+        setItems(transformedData);      
         
       }
       catch (error) {
@@ -43,6 +50,48 @@ export const Products = () => {
     }
     fetchItems();
   } , [])
+
+  useEffect(()=>{
+    if(eventState.id > -1){
+      if(eventState.type === 1) {
+        handleAddItem(eventState.id);
+      }
+      else if (eventState.type === -1){
+        handleRemoveItem(eventState.id)
+      }
+    }
+  },[eventState])
+
+  const handleAddItem = (id)=>{
+    // if(presentItems.indexOf(id) > -1){
+    //   return;
+    // }
+    // setPresentItems([...presentItems , id])
+    // onAddItem();
+    let data = [...items];
+    let index = data.findIndex(i => i.id === id);
+    data[index].quantity += 1;
+    setItems([...data]);
+    console.log(data[index]);
+    onAddItem(data[index]);
+  }
+
+  const handleRemoveItem = (id)=>{
+    // let index = presentItems.indexOf(id);
+    // if(index > -1){
+    //   let items = [...presentItems];
+    //   items.splice(index , 1);
+    //   setPresentItems([...items]);
+    //   onRemoveItem();
+    // }  
+    let data = [...items];
+    let index = data.findIndex(i => i.id === id);
+    if(data[index].quantity !== 0) {
+      data[index].quantity -= 1;
+      setItems([...data]);
+      onRemoveItem(data[index]);
+    }    
+  }
 
   const updateItemTitle = async (itemId) => {
     console.log("Item with Id:" ,itemId);
@@ -140,7 +189,7 @@ export const Products = () => {
           {
               items.map((item)=>{
                   return(
-                  <ListItem key = {item.id} data = {item} updateItemTitle = {updateItemTitle}/>
+                  <ListItem onAdd ={handleAddItem} onRemove = {handleRemoveItem} key = {item.id} data = {item} updateItemTitle = {updateItemTitle}/>
                   )
               })
           }

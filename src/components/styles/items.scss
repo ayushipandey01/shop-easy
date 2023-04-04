@@ -113,9 +113,11 @@
 
     &__modal {
         display: flex;
+        height: 50vh;
         .img-wrap {
             flex-basis: 40%;
             min-width: 40%;
+            flex-wrap: wrap;
         }
         .meta {
             flex-grow: 60%;
@@ -138,10 +140,10 @@
         
         .cart-addon {
             justify-content: space-between;
+            margin-bottom: 0px;
         }
     }
 }
-
 
 .pricing {
     small {
